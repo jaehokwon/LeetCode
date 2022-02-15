@@ -17,7 +17,8 @@ public class Solution {
         if (root == null)
             return 0;
 
-        Queue<(int, TreeNode)> queue = new Queue<(int, TreeNode)>();
+        // tuple<현재 노드의 level, 노드>을 담을 queue 생성
+        Queue<(int lv, TreeNode node)> queue = new Queue<(int lv, TreeNode node)>();
         queue.Enqueue((0, root));
         int lv = 0;
         int sum = 0;
@@ -26,17 +27,20 @@ public class Solution {
         {
             var tp = queue.Dequeue();
 
-            if (tp.Item1 != lv)
-                sum = tp.Item2.val;
+            // 이전 level과 현재 level이 다를 경우 sum 값 초기화
+            if (tp.lv != lv)
+                sum = tp.node.val;
             else
-                sum += tp.Item2.val;
+                sum += tp.node.val;
+            
+            lv = tp.lv;
 
-            lv = tp.Item1;
-            if (tp.Item2.left != null)
-                queue.Enqueue((tp.Item1 + 1, tp.Item2.left));
+            // 하위 노드를 담을 때 현재 노드의 level + 1하여 queue에 삽입 후 층별 순회
+            if (tp.node.left != null)
+                queue.Enqueue((tp.Item1 + 1, tp.node.left));
 
-            if (tp.Item2.right != null)
-                queue.Enqueue((tp.Item1 + 1, tp.Item2.right));
+            if (tp.node.right != null)
+                queue.Enqueue((tp.Item1 + 1, tp.node.right));
         }
 
         return sum;
