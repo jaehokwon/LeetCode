@@ -1,22 +1,14 @@
 class Solution:
     def maximumSwap(self, num: int) -> int:
-        res = [char for char in str(num)]
-        count = len(res)
-        max_num = num
+        lst = list(str(num))
+        n = len(lst)
+        p, q, max_index = -1, -1, n - 1
         
-        for i in range(0, count - 1):
-            for j in range(i + 1, count):
-                if res[i] < res[j]:
-                    res[i], res[j] = res[j], res[i]
-                    current_num = int(''.join(res))
-                    
-                    if max_num < current_num:
-                        max_num = current_num
-                        
-                    res[i], res[j] = res[j], res[i]
-            
-            if num < max_num:
-                break
+        for i in range(max_index - 1, -1, -1):
+            if lst[i] > lst[max_index]:
+                max_index = i
+            elif lst[i] < lst[max_index]:
+                p, q = i, max_index
         
-        return max_num
-    
+        lst[p], lst[q] = lst[q], lst[p]
+        return int(''.join(lst))
