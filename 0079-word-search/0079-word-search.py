@@ -1,32 +1,42 @@
 class Solution:
     def exist(self, board: List[List[str]], word: str) -> bool:
-
         m, n = len(board), len(board[0])
         word_len = len(word)
 
-        def search(x, y, i, flags) -> bool:
-            flags[y][x] = 1
+        # 방문 여부 flag
+        flags = [[0 for _ in range(n)] for _ in range(m)]
 
+        def search(x, y, i) -> bool:
+            # 전체 단어 비교 완료 시
             if i == word_len:
                 return True
 
-            if y - 1 >= 0 and flags[y - 1][x] == 0 and board[y - 1][x] == word[i] and search(x, y - 1, i + 1, flags): # up
-                return True
-            if y + 1 < m and flags[y + 1][x] == 0 and board[y + 1][x] == word[i] and search(x, y + 1, i + 1, flags): # down
-                return True
-            if x - 1 >= 0 and flags[y][x - 1] == 0 and board[y][x - 1] == word[i] and search(x - 1, y, i + 1, flags): # left
-                return True
-            if x + 1 < n and flags[y][x + 1] == 0 and board[y][x + 1] == word[i] and search(x + 1, y, i + 1, flags): # right
-                return True
+            # out of range
+            if x >= n or x < 0 or y >= m or y < 0:
+                return False
             
+            # alreay visit
+            if flags[y][x] == 1:
+                return False
+
+            # not equal word
+            if board[y][x] != word[i]:
+                return False
+
+            flags[y][x] = 1
+            direction = [(0, -1), (0, 1), (-1, 0), (1, 0)]
+
+            for (x2, y2) in direction:
+                if search(x + x2, y + y2, i + 1):
+                    return True
+
             flags[y][x] = 0
 
             return False
-
         
-        for y in range(0, m):
-            for x in range(0, n):
-                if board[y][x] == word[0] and search(x, y, 1, [[0 for _ in range(0, n)] for _ in range(0, m)]):
+        for y in range(m):
+            for x in range(n):
+                if search(x, y, 0):
                     return True
 
         return False
