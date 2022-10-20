@@ -3,11 +3,23 @@ class Solution:
         m, n = len(board), len(board[0])
         word_len = len(word)
 
-        # 방문 여부 flag
+        # compare board, word char count
+        board_dict = defaultdict(int)
+        for y in range(m):
+            for x in range(n):
+                board_dict[board[y][x]] += 1
+
+        word_dict = Counter(word)
+
+        for c in word_dict:
+            if c not in board_dict or board_dict[c] < word_dict[c]:
+                return False
+
+        # visit flag
         flags = [[0 for _ in range(n)] for _ in range(m)]
 
         def search(x, y, i) -> bool:
-            # 전체 단어 비교 완료 시
+            # complete compare
             if i == word_len:
                 return True
 
@@ -15,7 +27,7 @@ class Solution:
             if x >= n or x < 0 or y >= m or y < 0:
                 return False
             
-            # alreay visit
+            # already visit
             if flags[y][x] == 1:
                 return False
 
