@@ -1,36 +1,34 @@
-# Definition for singly-linked list.
-# class ListNode:
-#     def __init__(self, val=0, next=None):
-#         self.val = val
-#         self.next = next
 class Solution:
     def addTwoNumbers(self, l1: Optional[ListNode], l2: Optional[ListNode]) -> Optional[ListNode]:
-        return self.convertNumberToNode(self.convertNodeToNumber(l1) + self.convertNodeToNumber(l2))
-    
-    def convertNodeToNumber(self, l: Optional[ListNode]) -> int:
-        node = l
-        list_num = []
+        node = ListNode(0, None)
+        node_cur = None
+        carry = False
 
-        while node is not None:
-            list_num.append(node.val)
-            node = node.next
-        
-        list_num.reverse()
-        return int(''.join([str(i) for i in list_num]))
-    
-    def convertNumberToNode(self, num: int) -> Optional[ListNode]:
-        node = None
-        node_last = None
+        while l1 or l2 or carry:
+            num = 0
 
-        while num > 0:
-            node_cur = ListNode(num%10, None)
-
-            if node is None:
-                node = node_cur
+            if l1:
+                num += l1.val
+                l1 = l1.next
+            
+            if l2:
+                num += l2.val
+                l2 = l2.next
+            
+            if carry:
+                num += 1
+            
+            if num//10 > 0:
+                carry = True
+                num %= 10
             else:
-                node_last.next = node_cur
+                carry = False
+            
+            if not node_cur:
+                node_cur = node
+                node_cur.val = num
+            else:
+                node_cur.next = ListNode(num, None)
+                node_cur = node_cur.next
 
-            num = num//10
-            node_last = node_cur
-        
-        return node if node else ListNode(0, None)
+        return node
