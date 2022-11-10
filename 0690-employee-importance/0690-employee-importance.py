@@ -10,10 +10,7 @@ class Employee:
 class Solution:
     def getImportance(self, employees: List['Employee'], id: int) -> int:
         importance = 0
-        dic = {}
-        
-        for emp in employees:
-            dic[emp.id] = emp
+        dic = {emp.id: emp for emp in employees}
         
         queue = []
         queue.append(dic[id])
