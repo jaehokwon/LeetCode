@@ -3,8 +3,6 @@ class Solution:
         hour %= 12
         hoursAngle = (360 * (hour/12)) + (30 * (minutes/60))
         minutesAngle = 360 * (minutes/60)
-        result = min(abs(hoursAngle-minutesAngle), abs(minutesAngle-hoursAngle))
-        if result > 180:
-            result = 360 - hoursAngle + minutesAngle  if hoursAngle > minutesAngle else 360 - minutesAngle + hoursAngle
-        
+        result = abs(hoursAngle-minutesAngle)
+        result = min(360-result, result)
         return result
